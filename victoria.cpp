@@ -5,6 +5,7 @@
 using namespace std::chrono_literals;
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core/utils/filesystem.hpp>
 
@@ -37,6 +38,7 @@ void colormapNvdi( cv::InputArray iimg, cv::OutputArray oimg ) {
   oimg.assign( img );
 }
 
+} // namespace vic
 
 int main( int argc, char *argv[] ) {
   bool is_done = false;
@@ -60,7 +62,7 @@ int main( int argc, char *argv[] ) {
     cv::Mat img = cv::imread( filename );
 
     cv::Mat nvdi;
-    calculateNvdi( img, nvdi );
+    vic::calculateNvdi( img, nvdi );
     cv::Mat nvdidiff = nvdi - lastnvdi;
     lastnvdi = nvdi;
 
@@ -71,7 +73,7 @@ int main( int argc, char *argv[] ) {
     } else {
       cv::normalize( nvdi, nvdinorm, 1, 0, cv::NORM_MINMAX );
     }
-    colormapNvdi( nvdinorm, img );
+    vic::colormapNvdi( nvdinorm, img );
     cv::imshow( "disp", img );
 
     cv::Mat diffimg;
@@ -80,7 +82,7 @@ int main( int argc, char *argv[] ) {
     } else {
       cv::normalize( nvdidiff, nvdinorm, 1, 0, cv::NORM_MINMAX );
     }
-    colormapNvdi( nvdinorm, diffimg );
+    vic::colormapNvdi( nvdinorm, diffimg );
     cv::imshow( "diff disp", diffimg );
 
     auto start = std::chrono::system_clock::now();
@@ -107,5 +109,4 @@ int main( int argc, char *argv[] ) {
 
   exit( 0 );
 }
-
 
